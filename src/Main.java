@@ -8,14 +8,16 @@ public class Main {
     // https://leetcode.com/problems/simplify-path/
     public static String simplifyPath(String path) {
         StringBuilder result = new StringBuilder();
-        String folders[] = path.split("/");
+        String[] folders = path.split("/");
         Deque<String> deque = new ArrayDeque<>();
         for (String item : folders) {
             if (!item.equals("") && (!item.equals("."))) {
                 if (!item.equals("..")) {
                     deque.addLast(item);
                 } else {
-                    if (deque.peekLast() != null) deque.pollLast();
+                    if (deque.peekLast() != null) {
+                        deque.pollLast();
+                    }
                 }
             }
         }
@@ -23,7 +25,9 @@ public class Main {
             result.append("/");
             result.append(deque.pollFirst());
         }
-        if (result.length() == 0) result.append("/");
+        if (result.length() == 0) {
+            result.append("/");
+        }
         return result.toString();
     }
 
@@ -37,20 +41,30 @@ public class Main {
         staples.put(']', '[');
         staples.put('}', '{');
         for (int i = 0; i < s.length(); i++) {
-            if (staples.containsValue(s.charAt(i))) deque.push(s.charAt(i));
-            else if (staples.containsKey(s.charAt(i))) {
-                if (deque.peek() == null) return false;
+            if (staples.containsValue(s.charAt(i))) {
+                deque.push(s.charAt(i));
+            } else if (staples.containsKey(s.charAt(i))) {
+                if (deque.peek() == null) {
+                    return false;
+                }
                 char staple = deque.pop();
-                if (staple != staples.get(s.charAt(i))) return false;
-            } else return false;
+                if (staple != staples.get(s.charAt(i))) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
 
         }
-        if (deque.peek() != null) return false;
+        if (deque.peek() != null) {
+            return false;
+        }
         return true;
     }
 
     // Task03
-    //Написать программу вычисляющую значение сложного арифметического выражения. Для простоты - выражение всегда вычисляемое
+    //Написать программу вычисляющую значение сложного арифметического выражения.
+    // Для простоты - выражение всегда вычисляемое
     public static String dequeToString(Deque deque) {
         StringBuilder sb = new StringBuilder();
         while (deque.peek() != null) {
@@ -92,6 +106,8 @@ public class Main {
                             Double pow = Math.pow(a, b);
                             a = pow.intValue();
                             break;
+                        default:
+                            break;
                     }
                     stack.push(a + "");
                 }
@@ -118,18 +134,22 @@ public class Main {
                     queue.addLast(sb);
                     sb = new StringBuilder();
                 }
-                if (expression.charAt(i) == '(') stack.push('(');
-                else if (expression.charAt(i) == ')') {
+                if (expression.charAt(i) == '(') {
+                    stack.push('(');
+                } else if (expression.charAt(i) == ')') {
                     while (((char) stack.peek() != '(') && stack.peek() != null) {
                         queue.addLast(stack.poll());
                     }
-                    if ((char) stack.peek() == '(') stack.poll();
+                    if ((char) stack.peek() == '(') {
+                        stack.poll();
+                    }
                 } else if (operations.containsKey(expression.charAt(i))) {
-                    if ((stack.peek() != null) && (operations.get(stack.peek()) != null)) {
+                    if ((stack.peek() != null)
+                            && (operations.get(stack.peek()) != null)) {
                         int priority = operations.get(expression.charAt(i));
-                        while ((stack.peek() != null) &&
-                                (operations.get(stack.peek()) != null) &&
-                                (operations.get(stack.peek()) >= priority)) {
+                        while ((stack.peek() != null)
+                                && (operations.get(stack.peek()) != null)
+                                && (operations.get(stack.peek()) >= priority)) {
                             queue.addLast(stack.poll());
                         }
                     }
